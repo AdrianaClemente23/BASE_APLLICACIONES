@@ -7,9 +7,10 @@
                         <h5 class="fw-bold text-secondary mb-2">¡Gestión de Permisos!</h5>
                         <h3 class="fw-bold text-primary mb-0">ASIGNACIÓN DE PERMISOS A USUARIOS</h3>
                     </div>
-                    <form id="formAsignacionPermiso" class="p-4 bg-white rounded-3 shadow-sm border">
+                    <form id="formAsigPermiso" class="p-4 bg-white rounded-3 shadow-sm border">
                         <input type="hidden" id="asignacion_id" name="asignacion_id">
-                        <input type="hidden" id="asignacion_fecha" name="asignacion_fecha" value="">
+                        <input type="hidden" id="asignacion_fecha_asignar" name="asignacion_fecha_asignar" value="">
+                        <input type="hidden" id="asignacion_fecha_quitar" name="asignacion_fecha_quitar" value="">
                         <input type="hidden" id="asignacion_situacion" name="asignacion_situacion" value="1">
                         
                         <div class="row g-4 mb-3">
@@ -87,7 +88,7 @@
                                     <th>Asignado por</th>
                                     <th>Fecha</th>
                                     <th>Motivo</th>
-                                    <th>Situación</th>
+                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -102,4 +103,4 @@
 </div>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<script src="<?= asset('build/js/asignacionpermisos/index.js') ?>"></script>
+<script src="<?= asset('build/js/asigpermisos/index.js') ?>"></script>

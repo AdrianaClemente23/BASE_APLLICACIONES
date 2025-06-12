@@ -4,7 +4,7 @@ namespace Model;
 
 use Model\ActiveRecord;
 
-class AsignacionPermisos extends ActiveRecord {
+class AsigPermisos extends ActiveRecord {
     
     // Configuración de la tabla
     public static $tabla = 'asig_permisos';
@@ -13,7 +13,8 @@ class AsignacionPermisos extends ActiveRecord {
         'asignacion_usuario_id',
         'asignacion_app_id',
         'asignacion_permiso_id',
-        'asignacion_fecha',
+        'asignacion_fecha_asignar',
+        'asignacion_fecha_quitar',
         'asignacion_usuario_asigno',
         'asignacion_motivo',
         'asignacion_situacion'
@@ -24,7 +25,8 @@ class AsignacionPermisos extends ActiveRecord {
     public $asignacion_usuario_id;
     public $asignacion_app_id;
     public $asignacion_permiso_id;
-    public $asignacion_fecha;
+    public $asignacion_fecha_asignar;
+    public $asignacion_fecha_quitar;
     public $asignacion_usuario_asigno;
     public $asignacion_motivo;
     public $asignacion_situacion;
@@ -36,7 +38,8 @@ class AsignacionPermisos extends ActiveRecord {
         $this->asignacion_usuario_id = $asignacion['asignacion_usuario_id'] ?? 0;
         $this->asignacion_app_id = $asignacion['asignacion_app_id'] ?? 0;
         $this->asignacion_permiso_id = $asignacion['asignacion_permiso_id'] ?? 0;
-        $this->asignacion_fecha = $asignacion['asignacion_fecha'] ?? '';
+        $this->asignacion_fecha_asignar = $asignacion['asignacion_fecha_asignar'] ?? '';
+        $this->asignacion_fecha_quitar = $asignacion['asignacion_fecha_quitar'] ?? '';
         $this->asignacion_usuario_asigno = $asignacion['asignacion_usuario_asigno'] ?? 0;
         $this->asignacion_motivo = $asignacion['asignacion_motivo'] ?? '';
         $this->asignacion_situacion = $asignacion['asignacion_situacion'] ?? 1;
@@ -48,8 +51,14 @@ class AsignacionPermisos extends ActiveRecord {
         return self::SQL($sql);
     }
 
+    // Método para quitar permiso (borrado físico)
+    public static function QuitarAsignacion($id){
+        $sql = "DELETE FROM asig_permisos WHERE asignacion_id = $id";
+        return self::SQL($sql);
+    }
+
     // Verificar si ya existe la asignación
-    public static function VerificarPermiso($usuario_id, $app_id, $permiso_id){
+    public static function VerificarAsignacion($usuario_id, $app_id, $permiso_id){
         $sql = "SELECT COUNT(*) as total FROM asig_permisos 
                 WHERE asignacion_usuario_id = $usuario_id 
                 AND asignacion_app_id = $app_id 
@@ -62,7 +71,7 @@ class AsignacionPermisos extends ActiveRecord {
 
     // Método para obtener todas las asignaciones activas
     public static function ObtenerActivas(){
-        $sql = "SELECT * FROM asig_permisos WHERE asignacion_situacion = 1 ORDER BY asignacion_fecha DESC";
+        $sql = "SELECT * FROM asig_permisos WHERE asignacion_situacion = 1 ORDER BY asignacion_fecha_asignar DESC";
         return self::fetchArray($sql);
     }
 

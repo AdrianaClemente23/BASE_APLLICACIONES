@@ -1,4 +1,6 @@
-create database clementeperez
+create DATABASE base_proyecto
+
+
 CREATE TABLE usuario(
 usuario_id SERIAL PRIMARY KEY,
 usuario_nom1 VARCHAR (50) NOT NULL,
@@ -48,13 +50,23 @@ asignacion_id SERIAL PRIMARY KEY,
 asignacion_usuario_id INT NOT NULL,
 asignacion_app_id INT NOT NULL,
 asignacion_permiso_id INT NOT NULL,
-asignacion_fecha DATE DEFAULT TODAY,
+asignacion_fecha_asignar DATE DEFAULT TODAY,
+asignacion_fecha_quitar DATE DEFAULT TODAY,
 asignacion_usuario_asigno INT NOT NULL,
 asignacion_motivo VARCHAR (250) NOT NULL,
 asignacion_situacion SMALLINT DEFAULT 1,
 FOREIGN KEY (asignacion_usuario_id) REFERENCES usuario(usuario_id),
 FOREIGN KEY (asignacion_app_id) REFERENCES aplicacion(app_id),
 FOREIGN KEY (asignacion_permiso_id) REFERENCES permiso(permiso_id)
+);
+
+CREATE TABLE rutas(
+ruta_id SERIAL PRIMARY KEY,
+ruta_app_id INT NOT NULL,
+ruta_nombre LVARCHAR (1056) NOT NULL,
+ruta_descripcion VARCHAR (250) NOT NULL,
+ruta_situacion SMALLINT DEFAULT 1,
+FOREIGN KEY (ruta_app_id) REFERENCES aplicacion(app_id)
 );
 
 CREATE TABLE historial_act(
@@ -68,11 +80,6 @@ FOREIGN KEY (historial_usuario_id) REFERENCES usuario(usuario_id),
 FOREIGN KEY (historial_ruta) REFERENCES rutas(ruta_id)
 );
 
-CREATE TABLE rutas(
-ruta_id SERIAL PRIMARY KEY,
-ruta_app_id INT NOT NULL,
-ruta_nombre LVARCHAR (1056) NOT NULL,
-ruta_descripcion VARCHAR (250) NOT NULL,
-ruta_situacion SMALLINT DEFAULT 1,
-FOREIGN KEY (ruta_app_id) REFERENCES aplicacion(app_id)
-);
+
+
+

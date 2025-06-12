@@ -9,10 +9,9 @@ module.exports = {
     'js/usuarios/index' : './src/js/usuarios/index.js',
     'js/aplicacion/index' : './src/js/aplicacion/index.js',
     'js/permisos/index' : './src/js/permisos/index.js',
-      'js/asignacionpermisos/index' : './src/js/asignacionpermisos/index.js',
+     'js/asigpermisos/index' : './src/js/asigpermisos/index.js',
 
-
-
+    
 
   },
   output: {
@@ -24,6 +23,8 @@ module.exports = {
         filename: 'styles.css'
     })
   ],
+
+  
   module: {
     rules: [
       {
