@@ -18,7 +18,7 @@ const seccionTabla = document.getElementById('seccionTabla');
 
 // Cargar usuarios en los selects
 const cargarUsuarios = async () => {
-    const url = `/clementeperez/asigpermisos/buscarUsuariosAPI`;
+    const url = `/clementeperez/asignacionpermisos/buscarUsuariosAPI`;
     const config = {
         method: 'GET'
     }
@@ -62,7 +62,7 @@ const cargarUsuarios = async () => {
 
 // Cargar aplicaciones
 const cargarAplicaciones = async () => {
-    const url = `/clementeperez/asigpermisos/buscarAplicacionesAPI`;
+    const url = `/clementeperez/asignacionpermisos/buscarAplicacionesAPI`;
     const config = {
         method: 'GET'
     }
@@ -98,7 +98,7 @@ const cargarAplicaciones = async () => {
 
 // Cargar permisos por aplicación
 const cargarPermisosPorAplicacion = async (app_id) => {
-    const url = `/clementeperez/asigpermisos/buscarPermisosAPI?app_id=${app_id}`;
+    const url = `/clementeperez/asignacionpermisos/buscarPermisosAPI?app_id=${app_id}`;
     const config = {
         method: 'GET'
     }
@@ -159,7 +159,7 @@ const guardarAsignacionPermiso = async e => {
     }
 
     const body = new FormData(formAsigPermiso);
-    const url = "/clementeperez/asigpermisos/guardarAPI";
+    const url = "/clementeperez/asignacionpermisos/guardarAPI";
     const config = {
         method: 'POST',
         body
@@ -200,7 +200,7 @@ const guardarAsignacionPermiso = async e => {
 
 // Buscar asignaciones
 const BuscarAsignaciones = async () => {
-    const url = `/clementeperez/asigpermisos/buscarAPI`;
+    const url = `/clementeperez/asignacionpermisos/buscarAPI`;
     const config = {
         method: 'GET'
     }
@@ -407,7 +407,7 @@ const ModificarAsignacion = async (event) => {
     }
 
     const body = new FormData(formAsigPermiso);
-    const url = '/clementeperez/asigpermisos/modificarAPI';
+    const url = '/clementeperez/asignacionpermisos/modificarAPI';
     const config = {
         method: 'POST',
         body
@@ -462,7 +462,7 @@ const EliminarAsignaciones = async (e) => {
     });
 
     if (AlertaConfirmarEliminar.isConfirmed) {
-        const url = `/clementeperez/asigpermisos/eliminar?id=${idAsignacion}`;
+        const url = `/clementeperez/asignacionpermisos/eliminar?id=${idAsignacion}`;
         const config = {
             method: 'GET'
         }
