@@ -1,0 +1,80 @@
+<?php
+
+namespace Model;
+
+use Model\ActiveRecord;
+
+class AsignacionPermisos extends ActiveRecord {
+    
+    // Configuración de la tabla
+    public static $tabla = 'asig_permisos';
+    public static $idTabla = 'asignacion_id';
+    public static $columnasDB = [
+        'asignacion_usuario_id',
+        'asignacion_app_id',
+        'asignacion_permiso_id',
+        'asignacion_fecha',
+        'asignacion_usuario_asigno',
+        'asignacion_motivo',
+        'asignacion_situacion'
+    ];
+    
+    // Propiedades
+    public $asignacion_id;
+    public $asignacion_usuario_id;
+    public $asignacion_app_id;
+    public $asignacion_permiso_id;
+    public $asignacion_fecha;
+    public $asignacion_usuario_asigno;
+    public $asignacion_motivo;
+    public $asignacion_situacion;
+    
+    // Constructor
+    public function __construct($asignacion = [])
+    {
+        $this->asignacion_id = $asignacion['asignacion_id'] ?? null;
+        $this->asignacion_usuario_id = $asignacion['asignacion_usuario_id'] ?? 0;
+        $this->asignacion_app_id = $asignacion['asignacion_app_id'] ?? 0;
+        $this->asignacion_permiso_id = $asignacion['asignacion_permiso_id'] ?? 0;
+        $this->asignacion_fecha = $asignacion['asignacion_fecha'] ?? '';
+        $this->asignacion_usuario_asigno = $asignacion['asignacion_usuario_asigno'] ?? 0;
+        $this->asignacion_motivo = $asignacion['asignacion_motivo'] ?? '';
+        $this->asignacion_situacion = $asignacion['asignacion_situacion'] ?? 1;
+    }
+
+    // Método para eliminar (borrado lógico)
+    public static function EliminarAsignacion($id){
+        $sql = "UPDATE asig_permisos SET asignacion_situacion = 0 WHERE asignacion_id = $id";
+        return self::SQL($sql);
+    }
+
+    // Verificar si ya existe la asignación
+    public static function VerificarPermiso($usuario_id, $app_id, $permiso_id){
+        $sql = "SELECT COUNT(*) as total FROM asig_permisos 
+                WHERE asignacion_usuario_id = $usuario_id 
+                AND asignacion_app_id = $app_id 
+                AND asignacion_permiso_id = $permiso_id 
+                AND asignacion_situacion = 1";
+        
+        $resultado = self::fetchFirst($sql);
+        return isset($resultado['total']) && $resultado['total'] > 0;
+    }
+
+    // Método para obtener todas las asignaciones activas
+    public static function ObtenerActivas(){
+        $sql = "SELECT * FROM asig_permisos WHERE asignacion_situacion = 1 ORDER BY asignacion_fecha DESC";
+        return self::fetchArray($sql);
+    }
+
+    // Método para obtener asignaciones por usuario
+    public static function ObtenerPorUsuario($usuario_id){
+        $sql = "SELECT * FROM asig_permisos WHERE asignacion_usuario_id = $usuario_id AND asignacion_situacion = 1";
+        return self::fetchArray($sql);
+    }
+
+    // Método para obtener asignaciones por aplicación
+    public static function ObtenerPorAplicacion($app_id){
+        $sql = "SELECT * FROM asig_permisos WHERE asignacion_app_id = $app_id AND asignacion_situacion = 1";
+        return self::fetchArray($sql);
+    }
+}
