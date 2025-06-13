@@ -47,9 +47,9 @@
                                 <label for="permiso_tipo" class="form-label">Tipo de Permiso</label>
                                 <select class="form-control form-control-lg" id="permiso_tipo" name="permiso_tipo" required>
                                     <option value="FUNCIONAL">FUNCIONAL</option>
-                                    <option value="ADMIN">ADMIN</option>
-                                    <option value="LECTURA">LECTURA</option>
-                                    <option value="ESCRITURA">ESCRITURA</option>
+                                    <option value="ADMIN">ADMINISTRATIVO</option>
+                                    <option value="LECTURA">CONSULTA</option>
+                                    <option value="ESCRITURA">TRANSACCIONAL</option>
                                 </select>
                             </div>
                         </div>

@@ -5,8 +5,7 @@ namespace Model;
 use Model\ActiveRecord;
 
 class AsigPermisos extends ActiveRecord {
-    
-    // Configuración de la tabla
+
     public static $tabla = 'asig_permisos';
     public static $idTabla = 'asignacion_id';
     public static $columnasDB = [
@@ -20,7 +19,7 @@ class AsigPermisos extends ActiveRecord {
         'asignacion_situacion'
     ];
     
-    // Propiedades
+
     public $asignacion_id;
     public $asignacion_usuario_id;
     public $asignacion_app_id;
@@ -31,7 +30,7 @@ class AsigPermisos extends ActiveRecord {
     public $asignacion_motivo;
     public $asignacion_situacion;
     
-    // Constructor
+
     public function __construct($asignacion = [])
     {
         $this->asignacion_id = $asignacion['asignacion_id'] ?? null;
@@ -45,19 +44,19 @@ class AsigPermisos extends ActiveRecord {
         $this->asignacion_situacion = $asignacion['asignacion_situacion'] ?? 1;
     }
 
-    // Método para eliminar (borrado lógico)
+
     public static function EliminarAsignacion($id){
         $sql = "UPDATE asig_permisos SET asignacion_situacion = 0 WHERE asignacion_id = $id";
         return self::SQL($sql);
     }
 
-    // Método para quitar permiso (borrado físico)
+
     public static function QuitarAsignacion($id){
         $sql = "DELETE FROM asig_permisos WHERE asignacion_id = $id";
         return self::SQL($sql);
     }
 
-    // Verificar si ya existe la asignación
+
     public static function VerificarAsignacion($usuario_id, $app_id, $permiso_id){
         $sql = "SELECT COUNT(*) as total FROM asig_permisos 
                 WHERE asignacion_usuario_id = $usuario_id 
@@ -69,19 +68,19 @@ class AsigPermisos extends ActiveRecord {
         return isset($resultado['total']) && $resultado['total'] > 0;
     }
 
-    // Método para obtener todas las asignaciones activas
+
     public static function ObtenerActivas(){
         $sql = "SELECT * FROM asig_permisos WHERE asignacion_situacion = 1 ORDER BY asignacion_fecha_asignar DESC";
         return self::fetchArray($sql);
     }
 
-    // Método para obtener asignaciones por usuario
+
     public static function ObtenerPorUsuario($usuario_id){
         $sql = "SELECT * FROM asig_permisos WHERE asignacion_usuario_id = $usuario_id AND asignacion_situacion = 1";
         return self::fetchArray($sql);
     }
 
-    // Método para obtener asignaciones por aplicación
+
     public static function ObtenerPorAplicacion($app_id){
         $sql = "SELECT * FROM asig_permisos WHERE asignacion_app_id = $app_id AND asignacion_situacion = 1";
         return self::fetchArray($sql);

@@ -67,7 +67,7 @@
         </div>
     </div>
     
-    <!-- Sección de la tabla -->
+
     <div class="row justify-content-center mt-5" id="seccionTabla" style="display: none;">
         <div class="col-lg-12">
             <div class="card shadow-lg border-primary rounded-4">

@@ -123,17 +123,16 @@ const guardarPermiso = async e => {
             await Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Exito",
+                title: "Éxito",
                 text: mensaje,
                 showConfirmButton: true,
             });
-
-            limpiarTodo();
+            formPermiso.reset();
             BuscarPermisos();
         } else {
             await Swal.fire({
                 position: "center",
-                icon: "info",
+                icon: "error",
                 title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
@@ -143,6 +142,7 @@ const guardarPermiso = async e => {
     } catch (error) {
         console.log(error);
     }
+
     BtnGuardar.disabled = false;
 }
 
@@ -158,17 +158,16 @@ const BuscarPermisos = async () => {
         const { codigo, mensaje, data } = datos;
 
         if (codigo == 1) {
-            console.log('Permisos encontrados:', data);
-
-            if (datatable) {
-                datatable.clear().draw();
+            datatable.clear().draw();
+            
+            if (data.length > 0) {
                 datatable.rows.add(data).draw();
             }
         } else {
             await Swal.fire({
                 position: "center",
                 icon: "info",
-                title: "Error",
+                title: "Sin datos",
                 text: mensaje,
                 showConfirmButton: true,
             });
@@ -180,89 +179,70 @@ const BuscarPermisos = async () => {
 }
 
 const MostrarTabla = () => {
-    if (seccionTabla.style.display === 'none') {
-        seccionTabla.style.display = 'block';
-        BuscarPermisos();
-    } else {
-        seccionTabla.style.display = 'none';
-    }
+    seccionTabla.classList.remove('d-none');
+    BuscarPermisos();
 }
 
-const datatable = new DataTable('#TablePermisos', {
-    dom: `
-        <"row mt-3 justify-content-between" 
-            <"col" l> 
-            <"col" B> 
-            <"col-3" f>
-        >
-        t
-        <"row mt-3 justify-content-between" 
-            <"col-md-3 d-flex align-items-center" i> 
-            <"col-md-8 d-flex justify-content-end" p>
-        >
-    `,
+const datatable = new DataTable('#tablaPermisos', {
     language: lenguaje,
-    data: [],
+    data: null,
     columns: [
         {
             title: 'No.',
             data: 'permiso_id',
             width: '5%',
-            render: (data, type, row, meta) => meta.row + 1
+            render: (data, type, row, meta) => {
+                return meta.row + 1;
+            }
         },
-        { 
-            title: 'Usuario', 
+        {
+            title: 'Usuario',
             data: 'usuario_nom1',
-            width: '12%',
-            render: (data, type, row) => {
+            width: '15%',
+            render: (data, type, row, meta) => {
                 return `${row.usuario_nom1} ${row.usuario_ape1}`;
             }
         },
-        { 
-            title: 'Aplicación', 
+        {
+            title: 'Aplicación',
             data: 'app_nombre_corto',
-            width: '10%'
+            width: '15%'
         },
-        { 
-            title: 'Nombre del Permiso', 
+        {
+            title: 'Permiso',
             data: 'permiso_nombre',
-            width: '15%'
+            width: '20%'
         },
-        { 
-            title: 'Clave del Permiso', 
+        {
+            title: 'Clave',
             data: 'permiso_clave',
-            width: '12%'
-        },
-        { 
-            title: 'Tipo', 
-            data: 'permiso_tipo',
-            width: '8%'
-        },
-        { 
-            title: 'Descripción', 
-            data: 'permiso_desc',
             width: '15%'
+        },
+        {
+            title: 'Tipo',
+            data: 'permiso_tipo',
+            width: '10%'
         },
         {
             title: 'Asignado por',
             data: 'asigno_nom1',
-            width: '12%',
-            render: (data, type, row) => {
+            width: '15%',
+            render: (data, type, row, meta) => {
                 return `${row.asigno_nom1} ${row.asigno_ape1}`;
             }
         },
         {
             title: 'Situación',
             data: 'permiso_situacion',
-            width: '8%',
-            render: (data, type, row) => {
+            width: '5%',
+            render: (data, type, row, meta) => {
                 return data == 1 ? "ACTIVO" : "INACTIVO";
             }
         },
         {
             title: 'Acciones',
             data: 'permiso_id',
-            width: '13%',
+            width: '10%',
             searchable: false,
             orderable: false,
             render: (data, type, row, meta) => {
@@ -274,9 +254,9 @@ const datatable = new DataTable('#TablePermisos', {
                          data-app="${row.app_id || ''}"  
                          data-nombre="${row.permiso_nombre || ''}"  
                          data-clave="${row.permiso_clave || ''}"  
-                         data-desc="${row.permiso_desc || ''}"
-                         data-tipo="${row.permiso_tipo || ''}"
-                         data-asigno="${row.permiso_usuario_asigno || ''}"
+                         data-desc="${row.permiso_desc || ''}"  
+                         data-tipo="${row.permiso_tipo || ''}"  
+                         data-asigno="${row.permiso_usuario_asigno || ''}"  
                          data-motivo="${row.permiso_motivo || ''}"
                          title="Modificar">
                          <i class='bi bi-pencil-square me-1'></i> Modificar
@@ -336,7 +316,7 @@ const ModificarPermiso = async (event) => {
     }
 
     const body = new FormData(formPermiso);
-    const url = '/clementeperez/permisos/modificarAPI';
+    const url = "/clementeperez/permisos/modificarAPI";
     const config = {
         method: 'POST',
         body
@@ -345,23 +325,24 @@ const ModificarPermiso = async (event) => {
     try {
         const respuesta = await fetch(url, config);
         const datos = await respuesta.json();
+        console.log(datos);
         const { codigo, mensaje } = datos;
 
         if (codigo == 1) {
             await Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Exito",
+                title: "Éxito",
                 text: mensaje,
                 showConfirmButton: true,
             });
-
+            
             limpiarTodo();
             BuscarPermisos();
         } else {
             await Swal.fire({
                 position: "center",
-                icon: "info",
+                icon: "error",
                 title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
@@ -371,6 +352,7 @@ const ModificarPermiso = async (event) => {
     } catch (error) {
         console.log(error);
     }
+
     BtnModificar.disabled = false;
 }
 
@@ -379,8 +361,8 @@ const EliminarPermisos = async (e) => {
 
     const AlertaConfirmarEliminar = await Swal.fire({
         position: "center",
-        icon: "info",
-        title: "¿Desea ejecutar esta acción?",
+        icon: "warning",
+        title: "Confirmación",
         text: 'Esta completamente seguro que desea eliminar este registro',
         showConfirmButton: true,
         confirmButtonText: 'Si, Eliminar',
@@ -426,13 +408,18 @@ const EliminarPermisos = async (e) => {
     }
 }
 
-cargarUsuarios();
-cargarAplicaciones();
 
-datatable.on('click', '.eliminar', EliminarPermisos);
-datatable.on('click', '.modificar', llenarFormulario);
-formPermiso.addEventListener('submit', guardarPermiso);
+document.addEventListener('DOMContentLoaded', function() {
 
-BtnLimpiar.addEventListener('click', limpiarTodo);
-BtnModificar.addEventListener('click', ModificarPermiso);
-BtnBuscarPermisos.addEventListener('click', MostrarTabla);
+    cargarUsuarios();
+    cargarAplicaciones();
+
+
+    datatable.on('click', '.eliminar', EliminarPermisos);
+    datatable.on('click', '.modificar', llenarFormulario);
+    formPermiso.addEventListener('submit', guardarPermiso);
+
+    BtnLimpiar.addEventListener('click', limpiarTodo);
+    BtnModificar.addEventListener('click', ModificarPermiso);
+    BtnBuscarPermisos.addEventListener('click', MostrarTabla);
+});

@@ -26,12 +26,9 @@
     </style>
 </head>
 <body>
-    <!-- Section: Design Block -->
+
     <section class="text-center">
-        <!-- Background image -->
         <div class="p-5 bg-image" style="height: 300px;"></div>
-        <!-- Background image -->
-        
         <div class="card mx-4 mx-md-5 shadow-5-strong bg-body-tertiary" style="
             margin-top: -100px;
             backdrop-filter: blur(30px);
@@ -43,13 +40,11 @@
                         <p class="text-muted mb-5">INGRESA USUARIO Y CONTRASEÑA</p>
                         
                         <form id="FormLogin">
-                            <!-- DPI input -->
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <input type="text" name="usu_codigo" id="usu_codigo" class="form-control form-control-lg" />
                                 <label class="form-label" for="usu_codigo">DPI</label>
                             </div>
-                            
-                            <!-- Password input -->
+                        
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <input type="password" name="usu_password" id="usu_password" class="form-control form-control-lg" />
                                 <label class="form-label" for="usu_password">Password</label>

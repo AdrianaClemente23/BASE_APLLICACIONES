@@ -4,7 +4,6 @@ import { validarFormulario } from '../funciones';
 import DataTable from "datatables.net-bs5";
 import { lenguaje } from "../lenguaje";
 
-// Elementos del DOM
 const formAsigPermiso = document.getElementById('formAsigPermiso');
 const BtnGuardar = document.getElementById('BtnGuardar');
 const BtnModificar = document.getElementById('BtnModificar');
@@ -16,7 +15,6 @@ const SelectPermiso = document.getElementById('asignacion_permiso_id');
 const SelectUsuarioAsigno = document.getElementById('asignacion_usuario_asigno');
 const seccionTabla = document.getElementById('seccionTabla');
 
-// Cargar usuarios en los selects
 const cargarUsuarios = async () => {
     const url = `/clementeperez/asignacionpermisos/buscarUsuariosAPI`;
     const config = {
@@ -29,11 +27,11 @@ const cargarUsuarios = async () => {
         const { codigo, mensaje, data } = datos;
 
         if (codigo == 1) {
-            // Limpiar selects
+      
             SelectUsuario.innerHTML = '<option value="">Seleccione un usuario</option>';
             SelectUsuarioAsigno.innerHTML = '<option value="">Seleccione quién asigna</option>';
             
-            // Llenar ambos selects con los usuarios
+      
             data.forEach(usuario => {
                 const option1 = document.createElement('option');
                 option1.value = usuario.usuario_id;
@@ -60,7 +58,7 @@ const cargarUsuarios = async () => {
     }
 }
 
-// Cargar aplicaciones
+
 const cargarAplicaciones = async () => {
     const url = `/clementeperez/asignacionpermisos/buscarAplicacionesAPI`;
     const config = {
@@ -96,7 +94,7 @@ const cargarAplicaciones = async () => {
     }
 }
 
-// Cargar permisos por aplicación
+
 const cargarPermisosPorAplicacion = async (app_id) => {
     const url = `/clementeperez/asignacionpermisos/buscarPermisosAPI?app_id=${app_id}`;
     const config = {
@@ -131,17 +129,7 @@ const cargarPermisosPorAplicacion = async (app_id) => {
     }
 }
 
-// Event listener para el cambio de aplicación
-SelectAplicacion.addEventListener('change', (e) => {
-    const app_id = e.target.value;
-    if (app_id && app_id.trim() !== '') {
-        cargarPermisosPorAplicacion(app_id);
-    } else {
-        SelectPermiso.innerHTML = '<option value="">Primero seleccione una aplicación</option>';
-    }
-});
 
-// Guardar asignación de permiso
 const guardarAsignacionPermiso = async e => {
     e.preventDefault();
     BtnGuardar.disabled = true;
@@ -175,17 +163,17 @@ const guardarAsignacionPermiso = async e => {
             await Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Exito",
+                title: "Éxito",
                 text: mensaje,
                 showConfirmButton: true,
             });
-
-            limpiarTodo();
+            formAsigPermiso.reset();
+            SelectPermiso.innerHTML = '<option value="">Primero seleccione una aplicación</option>';
             BuscarAsignaciones();
         } else {
             await Swal.fire({
                 position: "center",
-                icon: "info",
+                icon: "error",
                 title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
@@ -195,10 +183,11 @@ const guardarAsignacionPermiso = async e => {
     } catch (error) {
         console.log(error);
     }
+
     BtnGuardar.disabled = false;
 }
 
-// Buscar asignaciones
+
 const BuscarAsignaciones = async () => {
     const url = `/clementeperez/asignacionpermisos/buscarAPI`;
     const config = {
@@ -211,17 +200,16 @@ const BuscarAsignaciones = async () => {
         const { codigo, mensaje, data } = datos;
 
         if (codigo == 1) {
-            console.log('Asignaciones encontradas:', data);
-
-            if (datatable) {
-                datatable.clear().draw();
+            datatable.clear().draw();
+            
+            if (data.length > 0) {
                 datatable.rows.add(data).draw();
             }
         } else {
             await Swal.fire({
                 position: "center",
                 icon: "info",
-                title: "Error",
+                title: "Sin datos",
                 text: mensaje,
                 showConfirmButton: true,
             });
@@ -232,95 +220,66 @@ const BuscarAsignaciones = async () => {
     }
 }
 
-// Mostrar/ocultar tabla
+
 const MostrarTabla = () => {
-    if (seccionTabla.style.display === 'none') {
-        seccionTabla.style.display = 'block';
-        BuscarAsignaciones();
-    } else {
-        seccionTabla.style.display = 'none';
-    }
+    seccionTabla.classList.remove('d-none');
+    BuscarAsignaciones();
 }
 
-// Configuración del DataTable
-const datatable = new DataTable('#TableAsignaciones', {
-    dom: `
-        <"row mt-3 justify-content-between" 
-            <"col" l> 
-            <"col" B> 
-            <"col-3" f>
-        >
-        t
-        <"row mt-3 justify-content-between" 
-            <"col-md-3 d-flex align-items-center" i> 
-            <"col-md-8 d-flex justify-content-end" p>
-        >
-    `,
+
+const datatable = new DataTable('#tablaAsignaciones', {
     language: lenguaje,
-    data: [],
+    data: null,
     columns: [
         {
             title: 'No.',
             data: 'asignacion_id',
             width: '5%',
-            render: (data, type, row, meta) => meta.row + 1
+            render: (data, type, row, meta) => {
+                return meta.row + 1;
+            }
         },
-        { 
-            title: 'Usuario', 
+        {
+            title: 'Usuario',
             data: 'usuario_nom1',
-            width: '12%',
-            render: (data, type, row) => {
+            width: '15%',
+            render: (data, type, row, meta) => {
                 return `${row.usuario_nom1} ${row.usuario_ape1}`;
             }
         },
-        { 
-            title: 'Aplicación', 
+        {
+            title: 'Aplicación',
             data: 'app_nombre_corto',
-            width: '10%'
-        },
-        { 
-            title: 'Permiso', 
-            data: 'permiso_nombre',
             width: '15%'
         },
-        { 
-            title: 'Tipo Permiso', 
+        {
+            title: 'Permiso',
+            data: 'permiso_nombre',
+            width: '20%'
+        },
+        {
+            title: 'Tipo',
             data: 'permiso_tipo',
-            width: '8%'
+            width: '10%'
         },
         {
             title: 'Asignado por',
             data: 'asigno_nom1',
-            width: '12%',
-            render: (data, type, row) => {
+            width: '15%',
+            render: (data, type, row, meta) => {
                 return `${row.asigno_nom1} ${row.asigno_ape1}`;
             }
         },
         {
             title: 'Fecha',
             data: 'asignacion_fecha_asignar',
-            width: '10%',
-            render: (data, type, row) => {
-                if (data) {
-                    const fecha = new Date(data);
-                    return fecha.toLocaleDateString('es-GT');
-                }
-                return '<span class="text-muted">N/A</span>';
-            }
-        },
-        { 
-            title: 'Motivo', 
-            data: 'asignacion_motivo',
-            width: '15%',
-            render: (data, type, row) => {
-                return data || '<span class="text-muted">Sin motivo</span>';
-            }
+            width: '10%'
         },
         {
-            title: 'Estado',
+            title: 'Situación',
             data: 'asignacion_situacion',
-            width: '8%',
-            render: (data, type, row) => {
+            width: '5%',
+            render: (data, type, row, meta) => {
                 return data == 1 ? "ACTIVO" : "INACTIVO";
             }
         },
@@ -354,7 +313,7 @@ const datatable = new DataTable('#TableAsignaciones', {
     ]
 });
 
-// Llenar formulario para modificar
+
 const llenarFormulario = async (event) => {
     const datos = event.currentTarget.dataset;
 
@@ -364,10 +323,10 @@ const llenarFormulario = async (event) => {
     document.getElementById('asignacion_usuario_asigno').value = datos.asigno;
     document.getElementById('asignacion_motivo').value = datos.motivo;
 
-    // Cargar permisos de la aplicación seleccionada y luego seleccionar el permiso
+
     if (datos.app) {
         await cargarPermisosPorAplicacion(datos.app);
-        // Esperar un momento para que se carguen los permisos
+
         setTimeout(() => {
             document.getElementById('asignacion_permiso_id').value = datos.permiso;
         }, 300);
@@ -381,7 +340,7 @@ const llenarFormulario = async (event) => {
     });
 }
 
-// Limpiar formulario
+
 const limpiarTodo = () => {
     formAsigPermiso.reset();
     SelectPermiso.innerHTML = '<option value="">Primero seleccione una aplicación</option>';
@@ -389,7 +348,7 @@ const limpiarTodo = () => {
     BtnModificar.classList.add('d-none');
 }
 
-// Modificar asignación
+
 const ModificarAsignacion = async (event) => {
     event.preventDefault();
     BtnModificar.disabled = true;
@@ -407,7 +366,7 @@ const ModificarAsignacion = async (event) => {
     }
 
     const body = new FormData(formAsigPermiso);
-    const url = '/clementeperez/asignacionpermisos/modificarAPI';
+    const url = "/clementeperez/asignacionpermisos/modificarAPI";
     const config = {
         method: 'POST',
         body
@@ -416,23 +375,24 @@ const ModificarAsignacion = async (event) => {
     try {
         const respuesta = await fetch(url, config);
         const datos = await respuesta.json();
+        console.log(datos);
         const { codigo, mensaje } = datos;
 
         if (codigo == 1) {
             await Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Exito",
+                title: "Éxito",
                 text: mensaje,
                 showConfirmButton: true,
             });
-
+            
             limpiarTodo();
             BuscarAsignaciones();
         } else {
             await Swal.fire({
                 position: "center",
-                icon: "info",
+                icon: "error",
                 title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
@@ -442,17 +402,18 @@ const ModificarAsignacion = async (event) => {
     } catch (error) {
         console.log(error);
     }
+
     BtnModificar.disabled = false;
 }
 
-// Eliminar asignación
+
 const EliminarAsignaciones = async (e) => {
     const idAsignacion = e.currentTarget.dataset.id;
 
     const AlertaConfirmarEliminar = await Swal.fire({
         position: "center",
-        icon: "info",
-        title: "¿Desea ejecutar esta acción?",
+        icon: "warning",
+        title: "Confirmación",
         text: 'Esta completamente seguro que desea eliminar este registro',
         showConfirmButton: true,
         confirmButtonText: 'Si, Eliminar',
@@ -498,15 +459,28 @@ const EliminarAsignaciones = async (e) => {
     }
 }
 
-// Cargar datos iniciales
-cargarUsuarios();
-cargarAplicaciones();
 
-// Event listeners
-datatable.on('click', '.eliminar', EliminarAsignaciones);
-datatable.on('click', '.modificar', llenarFormulario);
-formAsigPermiso.addEventListener('submit', guardarAsignacionPermiso);
+document.addEventListener('DOMContentLoaded', function() {
 
-BtnLimpiar.addEventListener('click', limpiarTodo);
-BtnModificar.addEventListener('click', ModificarAsignacion);
-BtnBuscarAsignaciones.addEventListener('click', MostrarTabla);
+    cargarUsuarios();
+    cargarAplicaciones();
+
+
+    SelectAplicacion.addEventListener('change', (e) => {
+        const app_id = e.target.value;
+        if (app_id && app_id.trim() !== '') {
+            cargarPermisosPorAplicacion(app_id);
+        } else {
+            SelectPermiso.innerHTML = '<option value="">Primero seleccione una aplicación</option>';
+        }
+    });
+
+
+    datatable.on('click', '.eliminar', EliminarAsignaciones);
+    datatable.on('click', '.modificar', llenarFormulario);
+    formAsigPermiso.addEventListener('submit', guardarAsignacionPermiso);
+
+    BtnLimpiar.addEventListener('click', limpiarTodo);
+    BtnModificar.addEventListener('click', ModificarAsignacion);
+    BtnBuscarAsignaciones.addEventListener('click', MostrarTabla);
+});

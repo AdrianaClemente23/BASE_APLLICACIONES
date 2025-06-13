@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sistema de Gestión de Permisos</title>
+    <title>Sistema de Gestión de Permisos</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -138,6 +139,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -148,12 +150,12 @@
             .welcome-title {
                 font-size: 2rem;
             }
-            
+
             .quick-actions {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .action-btn {
                 width: 100%;
                 max-width: 250px;
@@ -161,6 +163,7 @@
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <div class="logo">
@@ -168,8 +171,9 @@
         </div>
         <div class="user-info">
             <div class="user-avatar">U</div>
-            <span>Usuario</span>
-            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+            <a href="/clementeperez/logout" class="btn btn-danger">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a>
         </div>
     </header>
 
@@ -178,50 +182,23 @@
             <h1 class="welcome-title">Bienvenido</h1>
             <p class="welcome-message">Sistema de Gestión de Permisos</p>
             <div class="user-greeting">
-                ¡Hola! Esperamos que tengas un excelente día.
+                Bienvenido que tengas un excelente día.
             </div>
-            
+
             <div class="quick-actions">
-                <a href="/dashboard" class="action-btn">
-                    📊 Dashboard
+                <a href="/clementeperez/usuarios" class="action-btn">
+                    📊 Inicio
                 </a>
-                <a href="/usuarios" class="action-btn">
+                <a href="/clementeperez/aplicacion" class="action-btn">
                     👥 Usuarios
                 </a>
-                <a href="/permisos" class="action-btn">
+                <a href="/clementeperez/permisos" class="action-btn">
                     🔐 Permisos
                 </a>
             </div>
+
             
-            <div class="time-display" id="currentTime"></div>
         </div>
     </main>
-
-    <script>
-        // Mostrar hora actual
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleString('es-ES', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            document.getElementById('currentTime').textContent = timeString;
-        }
-
-        // Función de logout
-        function logout() {
-            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-                window.location.href = '/login';
-            }
-        }
-
-        // Actualizar tiempo cada minuto
-        updateTime();
-        setInterval(updateTime, 60000);
-    </script>
 </body>
 </html>
