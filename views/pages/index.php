@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -182,23 +183,23 @@
             <h1 class="welcome-title">Bienvenido</h1>
             <p class="welcome-message">Sistema de Gestión de Permisos</p>
             <div class="user-greeting">
-                Bienvenido que tengas un excelente día.
+
+                Bienvenido 
             </div>
 
             <div class="quick-actions">
                 <a href="/clementeperez/usuarios" class="action-btn">
-                    📊 Inicio
+                    👥 Usuarios
                 </a>
                 <a href="/clementeperez/aplicacion" class="action-btn">
-                    👥 Usuarios
+                    📊 Aplicacion
                 </a>
                 <a href="/clementeperez/permisos" class="action-btn">
                     🔐 Permisos
                 </a>
             </div>
-
-            
         </div>
     </main>
 </body>
+
 </html>

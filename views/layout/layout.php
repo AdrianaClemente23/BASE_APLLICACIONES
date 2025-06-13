@@ -29,6 +29,12 @@
                         <a class="nav-link" aria-current="page" href="/clementeperez/inicio"><i class="bi bi-house-fill me-2"></i>Inicio</a>
                     </li>
 
+                      <li class="nav-item">
+                        <a class="nav-link px-3" style="border: none; background: none;" href="/clementeperez/login">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link px-3" style="border: none; background: none;" href="/clementeperez/usuarios">
                             <i class="bi bi-people-fill me-2"></i>Usuarios
@@ -46,11 +52,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link px-3" style="border: none; background: none;" href="/clementeperez/login">
-                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
-                        </a>
-                    </li>
+                  
 
 
                     <li class="nav-item">
